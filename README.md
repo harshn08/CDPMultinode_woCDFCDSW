@@ -1,8 +1,10 @@
 # CDPMultinodeDocker
 
-CDP Multinode script using Docker on Mac/Windows 10, This will create  brand new 6 instances ( 2 4xlarge and 2 2xlarge)
+CDP Multinode script using Docker on Mac/Windows 10,
+This will create brand new 6 instances on AWS( 2 4xlarge and 2 2xlarge)
+CDP DC will be installed with full security (Kerberos,TLS and KMS)
 
-Updated on March 10 , 2020
+Updated on March 11, 2020
 
 
 Assumptions:
@@ -14,9 +16,8 @@ Assumptions:
 		4> Access to valid cloudera.com credentials to download binaries
 		5> Access to the relevant script from partner portal here.
 		6> Access to the following versions of docker are used for Mac OS and Windows 10 Pro. 
-		https://docs.docker.com/v17.12/docker-for-mac/
+		https://hub.docker.com/editions/community/docker-ce-desktop-mac/
 		https://hub.docker.com/editions/community/docker-ce-desktop-windows/
-
 
 AWS Dependencies:
 
@@ -26,21 +27,21 @@ AWS Dependencies:
 		4> Create a VPC(or use default), subnet and Security Group (SG) where these nodes are in the same AZ. 
 		5> Record the SG to be used in the config files. Make sure the SG is open to all hosts in security group.
 		
-Download and licence info:
+Download scripts,CDP DC bits and licence info:
 
-		1>Download the scripts. Save the files to your home directory (e.g. Users/ssharma)
-		NOTE: For Windows, avoid using space in folder-names. 
-		2>Copy the license file to this directory.You should have requested a trial license from the partner portal. 
-		3>Copy the AWS  ".pem" file into the home directory (Users/ssharma)
-		4>Create a directory say, mn-script. unzip the files here.  
-		5>Create another directory under mn-script eg #mkdir bins
-		6>Download the following/latest CSD’s into the “bins” directory 
-		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar 
-		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar
-		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar
-		Download the following files into the “bins” directory
-		CSP: https://www.cloudera.com/downloads/cdf/csp-trial.html(Version 0.8 - sha, parcel files and CSD 
-		CSM: https://www.cloudera.com/downloads/cdf/csm-trial.html(Version 2.0 - sha, parcel files and CSD
+		1> Download the scripts. Save the files to your home directory (e.g. Users/ssharma)
+		   NOTE: For Windows, avoid using space in folder-names. 
+		2> Copy the license file to this directory.You should have requested a trial license from the partner portal. 
+		3> Copy the AWS  ".pem" file into the home directory (Users/ssharma)
+		4> Create a directory say, mn-script. unzip the files here.  
+		5> Create another directory under mn-script eg #mkdir bins
+		6> Download the following or latest CSD’s into the “bins” directory 
+		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar 
+		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar
+		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar
+		Download the following or latest files into the “bins” directory
+		CSP: https://www.cloudera.com/downloads/cdf/csp-trial.html(Version 0.8 - sha, parcel files and CSD)
+		CSM: https://www.cloudera.com/downloads/cdf/csm-trial.html(Version 2.0 - sha, parcel files and CSD)
 
 	NOTE: Make sure the SCHEMAREGISTRY, STREAMS_MESSAGING_MANAGER and STREAMS_REPLICATION_MANAGER files are 
 	in the “bins” directory before executing the ansible playbook. 
@@ -50,8 +51,7 @@ Docker Setup:
 	On both Windows and Mac OS, Following commands are used to setup the environment.
 	We will execute the scripts to setup the 6-node cluster with all the relevant services. 
 	Kerberos,KMS and TLS will be setup by default. 
-	For documentation on Docker, refer to :https://docs.docker.com/v17.12/
-
+	
 	1> Ensure docker desktop has been installed and is running without any issues on your laptop. 
 	2> Open a terminal on mac and command prompt on a windows machine. 
 	   The set of instructions work on both Mac OS and Windows. 
