@@ -143,10 +143,20 @@ The home directory should be accessible via docker mapping of the folders.
         project: ansible-test<replace me>
   
 	3>Open and modify filepath for license in stock.cluster.krb.yml. where it says <replace me>
+	Example:
+	   licence:
+   	   type: enterprise
+      	   filepath: test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt<replace me>
+
 	4>Open /etc/ansible/ansible.cfg  make the following changes and save.
 	
-		a> uncomment “host_key_checking=false”
-		b> uncomment value_password_file and specify the location of your vault password file. 
+		a> uncomment record_host_key
+			# host key checking setting above.
+			record_host_keys=False
+			
+		b> uncomment value_password_file and specify the location of your vault password file.
+		 # specifying --vault-password-File on the command line.
+		   vault_password_file = /home/ssharma/sunita-vault-password
 	
 	5>Open /etc/ansible/hosts, add following 2 lines as below and save:
 
@@ -154,9 +164,13 @@ The home directory should be accessible via docker mapping of the folders.
 	localhost
 	
 	6>Change the following information in config/stock.cluster.krb.yml
-	  a> Add the private_key value eg:  {{ sunita_key }}
-          b> Provide the location for the parcel downloaded above from /bins folder (Step 6 Download and licence info)
-	  whereever it says <replace me>
+	 a> Add the private_key value eg: {{ sunita_key }}
+	 Example:
+ 	 # from vault file , replace <replace me> it with your own key  
+  		private_key: "{{ replace_key }}"
+		
+         b> Provide the location for the parcel downloaded above from /bins folder (Step 6 Download and licence info)
+	 where it says <replace me>
           Example: 
 	     local_csds: 
    	           - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar <replace me>
@@ -167,7 +181,7 @@ The home directory should be accessible via docker mapping of the folders.
       	     	- /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel<replace me>
              	- /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha<replace me>
 
-        
+       
 	7> For Auto_TLS, you will need a CDP DC license file from cloudera.
 	Specify the path to that file as indicated below, whereever it says <replace me> 
  	
