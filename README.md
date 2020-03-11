@@ -5,70 +5,80 @@ CDP Multinode script using Docker on Mac/Windows 10, This will create  brand new
 Updated on March 10 , 2020
 
 
-Assumptions
+Assumptions:
 
-		1> This document assumes that you have access to an AWS account.
-		2> Partners or their IT Dept can create their own VPC, Subnet, key-pair and security group in the same 			availability zone that will be used to create multi node instances in the script below.
-		3> Request cloudera license from partner portal . 
+		1> This document assumes that you have access to an AWS account
+		2> Partners or their IT Dept can create their own VPC, Subnet, key-pair and security group 
+		in the same availability zone that will be used to create multi node instances in the script below.
+		3> Request cloudera license from partner portal  
 		4> Access to valid cloudera.com credentials to download binaries
 		5> Access to the relevant script from partner portal here.
 		6> Access to the following versions of docker are used for Mac OS and Windows 10 Pro. 
+		https://docs.docker.com/v17.12/docker-for-mac/
+		https://hub.docker.com/editions/community/docker-ce-desktop-windows/
 
-AWS Dependencies
+
+AWS Dependencies:
 
 		1> AWS keypair (e.g. “.pem”) files to use with the scripts
 		2> Decide on AWS region/AZ (us-east-1 used in this example)
-		Image Used: ami-02eac2c0129f6376b #CentOS-7 x86_64 (Ensure an equivalent CentOS image is available in your AZ)
-		3>Create a VPC(or use default), subnet and Security Group (SG) where these nodes are in the same AZ. 
-		4> Record the SG to be used in the config files. Make sure the SG is open to all hosts in security group.
+		3> Ensure an equivalent CentOS image is available in your AZ,Example: ami-02eac2c0129f6376b #CentOS-7x86_64 
+		4> Create a VPC(or use default), subnet and Security Group (SG) where these nodes are in the same AZ. 
+		5> Record the SG to be used in the config files. Make sure the SG is open to all hosts in security group.
 		
 Download and licence info:
 
-		1>Download the scripts. Save the files to your home directory (e.g.  Users/ssharma)
+		1>Download the scripts. Save the files to your home directory (e.g. Users/ssharma)
 		NOTE: For Windows, avoid using space in folder-names. 
-		2>Copy the license file to this directory. You should have requested a trial license from the partner portal. 
-		3>Copy the AWS  .pem file into the home directory (Users/ssharma)
-		4>Create a directory called mn-script. unzip the files here.  
-		5>Create another directory under mn-script  eg #mkdir bins
-		6>Download the following CSD’s into the “bins” directory ( or latest ones)
-		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar
+		2>Copy the license file to this directory.You should have requested a trial license from the partner portal. 
+		3>Copy the AWS  ".pem" file into the home directory (Users/ssharma)
+		4>Create a directory say, mn-script. unzip the files here.  
+		5>Create another directory under mn-script eg #mkdir bins
+		6>Download the following/latest CSD’s into the “bins” directory 
+		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar 
 		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar
 		https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar
 		Download the following files into the “bins” directory
-		CSP: https://www.cloudera.com/downloads/cdf/csp-trial.html(Version 0.8 - sha, parcel files and CSD or latest) 
-		CSM: https://www.cloudera.com/downloads/cdf/csm-trial.html(Version 2.0 - sha, parcel files and CSD or latest)
+		CSP: https://www.cloudera.com/downloads/cdf/csp-trial.html(Version 0.8 - sha, parcel files and CSD 
+		CSM: https://www.cloudera.com/downloads/cdf/csm-trial.html(Version 2.0 - sha, parcel files and CSD
 
 	NOTE: Make sure the SCHEMAREGISTRY, STREAMS_MESSAGING_MANAGER and STREAMS_REPLICATION_MANAGER files are 
 	in the “bins” directory before executing the ansible playbook. 
 
 Docker Setup:
 
-	On both Windows and Mac OS, the following commands are used to setup the environment.We will execute the scripts to setup the 6-node cluster with all the relevant services. Kerberos and TLS will be setup by default. For documentation on Docker, refer to this link:https://docs.docker.com/v17.12/docker-for-mac/
+	On both Windows and Mac OS, Following commands are used to setup the environment.
+	We will execute the scripts to setup the 6-node cluster with all the relevant services. 
+	Kerberos,KMS and TLS will be setup by default. 
+	For documentation on Docker, refer to :https://docs.docker.com/v17.12/
 
 	1> Ensure docker desktop has been installed and is running without any issues on your laptop. 
-	2> Open a terminal on mac and command prompt on a windows machine. The set of instructions work on both Mac OS 		and Windows. 
-	3> $docker run -it fedora /bin/bash
-	4>Make a note the ID from the subsequent prompt as shown below. Use that ID to run the next command. 
-	5>$docker commit 77d2b4577cfb  myfedora (Use the ID from command above)
-	6>Mounting your local Mac drive  /Users/<dir> to Docker /home/<dir>
+	2> Open a terminal on mac and command prompt on a windows machine. 
+	   The set of instructions work on both Mac OS and Windows. 
+	3> $docker run -it fedora /bin/bash, you will see docker id as example below. 
+	      ...@077d2b4577cfb/mn-script#] exit;
+	    Make a note the ID  "77d2b4577cfb" . Use this id to run the next command. 
+	4> execute $docker commit 77d2b4577cfb  myfedora (Use the ID from command above)
+	5>Mounting your local Mac drive  /Users/<dir> to Docker /home/<dir>
 		
-	Mac Example: $docker run -it --volume /Users/ssharma:/home/ssharma myfedora /bin/bash
-	Windows Example: $docker run -it --volume C:\Users\ashish:/home/ashish myfedora /bin/bash
+		Mac Example: $docker run -it --volume /Users/ssharma:/home/ssharma myfedora /bin/bash
+		Windows Example: $docker run -it --volume C:\Users\ssharma:/home/ssharma myfedora /bin/bash
 		
-	7> At this time, you have a docker engine with all the relevant files mapped to your home directory 
-	eg: /home/ssharma.  Next,we will prep the docker container and customize these files . 
-        8> Install pyhton3 and boto3 in your Docker image 
+	6> At this time,you have a docker image with all the relevant files mapped to your home directory 
+	eg: /home/ssharma.Next,we will prep the docker container and customize these files. 
+        7> Install pyhton3 and boto3 in your Docker image 
 	
 		[root@2e3f9e83cf7a  ~]# dnf update -y
 		[root@2e3f9e83cf7a  ~]# dnf install -y ansible python3-pip git  
 		[root@2e3f9e83cf7a  ~]# pip3 install boto boto3
 	
-	9> Add SSH key on docker ( it is 2 step process )
+	8> Add SSH key on docker ( It is 2 step process )
 	NOTE: On windows, you will need to copy the .pem file to a native docker folder and run these commands. 
+	
 	Step 1 : This step produces agent pid as below
 	
 	$[root@2e3f9e83cf7a  ~]#eval ‘ssh-agent -s’
-	SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
+	  SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
  		SSH_AGENT_PID=51911; export SSH_AGENT_PID;
        		echo Agent pid 51911;
 		
