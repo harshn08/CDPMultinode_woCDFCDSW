@@ -1,7 +1,7 @@
 # CDPMultinodeDocker
 
 CDP Multinode script using Docker on Mac/Windows 10,
-This will create brand new 6 instances on AWS( 2 4xlarge and 2 2xlarge)
+This will create brand new 4 instances on AWS( 1 4xlarge for master and 3 2xlarge worker nodes)
 CDP DC will be installed with full security (Kerberos,TLS and KMS)
 
 Updated on March 11, 2020
@@ -217,7 +217,7 @@ above example shows [54.91.49.29] as cm server
 https://54.91.49.29:7183/cmf/login
 Pwd: admin/admin
 
-Login into AWS, check AWS EC2 instance , you will be able to see following instances created   has 3 Worker nodes(2xlarge+100gb) , 1 CDF(2xlarge+100gb) ,1 CDSW(4xlarge+100gb) and 1(4xlarge+100gb) master nodes
+Login into AWS, check AWS EC2 instance , you will be able to see following instances created   has 3 Worker nodes(2xlarge+100gb) , 1 CDF(2xlarge+100gb) and 1(4xlarge+100gb) master nodes
 
 
 
