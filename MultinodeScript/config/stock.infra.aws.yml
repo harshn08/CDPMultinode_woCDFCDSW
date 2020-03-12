@@ -1,6 +1,5 @@
 ###################
 # INFRASTRUCTURE  #
-# replace the parameter where it says <replace me> #
 ###################
 
 db:
@@ -10,18 +9,18 @@ db:
 instances:
   cloud: aws              # aws, azure, gcp, openstack (field cloud on OpenStack)
 
-  # defaults for all instance groups, replace values with your env
+  # defaults for all instance groups 
   region: us-east-1 <replace me>
-  subnet: subnet-76505a3cxx<replace me>
-  security_group: sg-010c70ad828ad9axx<replace me>
-  image: ami-02eac2c0129f6376b <replace me> # CentOS-7 x86_64
+  subnet: subnet-76505a3c <replace me>
+  security_group: sg-010c70ad828ad9a20 <replace me>
+  image: ami-02eac2c0129f6376b # CentOS-7 x86_64 <replace me>
   user: centos
   public_key_id: "{{ public_key }}"  
   bootstrap: ""
   tags:
-    owner: user.test<replace me>
-    enddate: "01312020"<replace me>
-    project: ansible-test<replace me>
+    owner: sunita.sharma <replace me>
+    enddate: "01312020" <replace me>
+    project: ansible-sstest <replace me>>
   
   instance_groups:
     - inventory_group: 

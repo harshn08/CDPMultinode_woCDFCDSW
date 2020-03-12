@@ -16,8 +16,8 @@ krb5_enc_types: aes256-cts
 cdsw_docker_devices_config: "/dev/nvme1n1"
 
 cdpdc:
-  # from vault file , replace <replace me> it with your own key  
-  private_key: "{{ replace_key }}"
+  # in vault file, replace key
+  private_key: "{{ sunita_key }}"
 
   cm:
     protocol: https
@@ -32,7 +32,7 @@ cdpdc:
 
     licence:
       type: enterprise
-      filepath: test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt<replace me>
+      filepath: test_2019_2020_cloudera_license.txt <replace me>
     
     auto_tls: yes
     kerberized: yes
@@ -76,19 +76,22 @@ cdpdc:
           pass: cloudera
 
     csds:
+      #replace with latest repo
       - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar"
       - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar"
       - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar"
 
     local_csds: 
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar <replace me>
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.jar <replace me>
+      # replace with your directory name  and latest jar 
+      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar
+      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.jar
 
     local_parcels: 
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel<<replace me>>
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel.sha<replace me>
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel<replace me>
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha<replace me>
+      # replace with your directory name  and latest jar 
+      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel
+      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel.sha
+      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel
+      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha
 
     config: 
       - name: KDC_HOST
