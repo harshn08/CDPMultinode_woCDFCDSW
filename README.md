@@ -1,7 +1,7 @@
-# CDPMultinodeDocker
+# CDP Multinode Docker ( without CDF and CDSW )
 
 CDP Multinode script using Docker on Mac/Windows 10,
-This will create brand new 4 instances on AWS( 1 4xlarge for master and 3 2xlarge worker nodes)
+This will create brand new 4 instances on AWS( 1 -4xlarge for master and 3- 2xlarge worker nodes)
 CDP DC will be installed with full security (Kerberos,TLS and KMS)
 
 Updated on March 11, 2020
@@ -177,21 +177,21 @@ Example:
 
 After End of Successful Execution, You will see something like below as a Recap:
 
-TASK [cdpdc_cm_server : reset var _api_command] ******************************************************************************************************************************
-ok: [54.91.49.29]
+TASK [cdpdc_cm_server : reset var _api_command] *************************************************************************************************************************************************
+ok: [18.208.221.22]
 
-PLAY RECAP ******************************************************************************************************************************
-100.24.8.58                : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-3.94.167.42                : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-52.90.154.199              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-54.208.14.90               : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-54.85.168.49               : ok=57   changed=37   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-54.91.49.29                : ok=118  changed=56   unreachable=0    failed=0    skipped=2    rescued=0    ignored=1   
+PLAY RECAP **************************************************************************************************************************************************************************************
+18.208.221.22              : ok=114  changed=52   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1   
+34.227.197.12              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+35.172.213.181             : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+54.90.184.32               : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+localhost                  : ok=17   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
 
 Use cm node ( 4xlarge ) to get into CM to verify the cluster status
 above example shows [54.91.49.29] as cm server
 
-https://54.91.49.29:7183/cmf/login
+https://18.208.221.22:7183/cmf/login
 Pwd: admin/admin
 
 Login into AWS, check AWS EC2 instance , you will be able to see following instances created   has 3 Worker nodes(2xlarge+100gb) , 1 CDF(2xlarge+100gb) and 1(4xlarge+100gb) master nodes
