@@ -178,7 +178,8 @@ Example:
 After End of Successful Execution, You will see something like below as a Recap:
 
 TASK [cdpdc_cm_server : reset var _api_command] ****************************************************************************************************************
-ok: [18.208.221.22]
+
+[18.208.221.22]
 
 PLAY RECAP *****************************************************************************************************
 18.208.221.22              : ok=114  changed=52   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1   
