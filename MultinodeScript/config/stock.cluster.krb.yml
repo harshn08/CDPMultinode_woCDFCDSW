@@ -16,7 +16,7 @@ krb5_enc_types: aes256-cts
 cdsw_docker_devices_config: "/dev/nvme1n1"
 
 cdpdc:
-  # in vault file, replace key
+  # in vault file
   private_key: "{{ sunita_key }}"
 
   cm:
@@ -32,11 +32,11 @@ cdpdc:
 
     licence:
       type: enterprise
-      filepath: test_2019_2020_cloudera_license.txt <replace me>
+      filepath: sunita_sharma_2019_2020_Licenseinfo/sunita_sharma_2019_2020_cloudera_license.txt
     
     auto_tls: yes
     kerberized: yes
-    cdsw_jar_with_fix_for_cr7: yes # allows cdsw 1.6.1 to be installed on CR 7.0.3
+    cdsw_jar_with_fix_for_cr7: no # allows cdsw 1.6.1 to be installed on CR 7.0.3
 
     db:
       type: mysql
@@ -75,23 +75,20 @@ cdpdc:
           user: ranger
           pass: cloudera
 
-    csds:
-      #replace with latest repo
-      - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar"
-      - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar"
-      - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar"
+    csds: []
+      # - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar"
+      # - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar"
+      # - "https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar"
 
-    local_csds: 
-      # replace with your directory name  and latest jar 
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.jar
+    local_csds: []
+      # - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar
+      # - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.jar
 
-    local_parcels: 
-      # replace with your directory name  and latest jar 
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel
-      - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel.sha
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel
-      - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha
+    local_parcels: []
+      # - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel
+      # - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel.sha
+      # - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel
+      # - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha
 
     config: 
       - name: KDC_HOST
@@ -152,33 +149,33 @@ cdpdc:
           - yarn-RESOURCEMANAGER-BASE
           - zookeeper-SERVER-BASE
       
-      - refName: cdsw_template
-        cardinality: 1
-        roleConfigGroupsRefNames:
-          - cdsw-CDSW_APPLICATION-BASE
-          - cdsw-CDSW_DOCKER-BASE
-          - cdsw-CDSW_MASTER-BASE
-          - hive-GATEWAY-BASE
-          - spark_on_yarn-GATEWAY-BASE
+      # - refName: cdsw_template
+      #   cardinality: 1
+      #   roleConfigGroupsRefNames:
+      #     - cdsw-CDSW_APPLICATION-BASE
+      #     - cdsw-CDSW_DOCKER-BASE
+      #     - cdsw-CDSW_MASTER-BASE
+      #     - hive-GATEWAY-BASE
+      #     - spark_on_yarn-GATEWAY-BASE
 
-      - refName: cdf_template
-        cardinality: 1
-        roleConfigGroupsRefNames:
-          - hbase-REGIONSERVER-BASE
-          - hdfs-DATANODE-BASE
-          - hive-GATEWAY-BASE
-          - impala-IMPALAD-BASE
-          - kafka-KAFKA_BROKER-BASE
-          - kudu-KUDU_TSERVER-BASE
-          - nifi-NIFI_NODE-BASE
-          - nifiregistry-NIFI_REGISTRY_SERVER-BASE
-          - nifitoolkitca-NIFI_TOOLKIT_SERVER-BASE
-          - schemaregistry-SCHEMA_REGISTRY_SERVER-BASE
-          - spark_on_yarn-GATEWAY-BASE
-          - streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE
-          - streams_messaging_manager-STREAMS_MESSAGING_MANAGER_UI-BASE
-          - yarn-NODEMANAGER-BASE
-          - zookeeper-SERVER-BASE
+      # - refName: cdf_template
+      #   cardinality: 1
+      #   roleConfigGroupsRefNames:
+      #     - hbase-REGIONSERVER-BASE
+      #     - hdfs-DATANODE-BASE
+      #     - hive-GATEWAY-BASE
+      #     - impala-IMPALAD-BASE
+      #     - kafka-KAFKA_BROKER-BASE
+      #     - kudu-KUDU_TSERVER-BASE
+      #     - nifi-NIFI_NODE-BASE
+      #     - nifiregistry-NIFI_REGISTRY_SERVER-BASE
+      #     - nifitoolkitca-NIFI_TOOLKIT_SERVER-BASE
+      #     - schemaregistry-SCHEMA_REGISTRY_SERVER-BASE
+      #     - spark_on_yarn-GATEWAY-BASE
+      #     - streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE
+      #     - streams_messaging_manager-STREAMS_MESSAGING_MANAGER_UI-BASE
+      #     - yarn-NODEMANAGER-BASE
+      #     - zookeeper-SERVER-BASE
       
       - refName: worker_template
         cardinality: 3
@@ -198,11 +195,11 @@ cdpdc:
         - hostName: "{{ hostvars[groups.main_master[0]].private_hostname }}"
           hostTemplateRefName: main_master_template
 
-        - hostName: "{{ hostvars[groups.cdf[0]].private_hostname }}"
-          hostTemplateRefName: cdf_template
+        # - hostName: "{{ hostvars[groups.cdf[0]].private_hostname }}"
+        #   hostTemplateRefName: cdf_template
 
-        - hostName: "{{ hostvars[groups.cdsw_master[0]].private_hostname }}"
-          hostTemplateRefName: cdsw_template
+        # - hostName: "{{ hostvars[groups.cdsw_master[0]].private_hostname }}"
+        #   hostTemplateRefName: cdsw_template
 
         - hostNameRange: "{{ hostvars[groups.workers[0]].private_hostname }}, {{ hostvars[groups.workers[1]].private_hostname }}, {{ hostvars[groups.workers[2]].private_hostname }}"
           hostTemplateRefName: worker_template
@@ -258,22 +255,22 @@ cdpdc:
     products:
       - product: CDH
         version: 7.0.3-1.cdh7.0.3.p0.1635019
-      - product: Anaconda
-        version: 5.1.0.1
-      - product: CDSW
-        version: 1.6.1.p1.1504243
-      - product: CFM
-        version: 1.0.0.0
-      - product: SCHEMAREGISTRY
-        version: 0.8.0.2.0.0.0-135
-      - product: STREAMS_MESSAGING_MANAGER
-        version: 2.1.0.2.0.0.0-135
+      # - product: Anaconda
+      #   version: 5.1.0.1
+      # - product: CDSW
+      #   version: 1.6.1.p1.1504243
+      # - product: CFM
+      #   version: 1.0.0.0
+      # - product: SCHEMAREGISTRY
+      #   version: 0.8.0.2.0.0.0-135
+      # - product: STREAMS_MESSAGING_MANAGER
+      #   version: 2.1.0.2.0.0.0-135
 
     repositories:
       - https://archive.cloudera.com/cdh7/7.0/parcels/
-      - https://archive.cloudera.com/CFM/parcels/1.0.0.0/
-      - https://archive.cloudera.com/cdsw1/1.6.1/parcels/
-      - https://repo.continuum.io/pkgs/misc/parcels/archive/
+      # - https://archive.cloudera.com/CFM/parcels/1.0.0.0/
+      # - https://archive.cloudera.com/cdsw1/1.6.1/parcels/
+      # - https://repo.continuum.io/pkgs/misc/parcels/archive/
 
     services:
       - refName: hive
@@ -364,15 +361,15 @@ cdpdc:
               - name: ranger_database_password
                 variable: ranger-RANGER_ADMIN-BASE-ranger_database_password
             base: true
-      - refName: nifiregistry
-        serviceType: NIFIREGISTRY
-        serviceConfigs:
-          - name: kerberos.auth.enabled
-            value: "true"
-        roleConfigGroups:
-          - refName: nifiregistry-NIFI_REGISTRY_SERVER-BASE
-            roleType: NIFI_REGISTRY_SERVER
-            base: true
+      # - refName: nifiregistry
+      #   serviceType: NIFIREGISTRY
+      #   serviceConfigs:
+      #     - name: kerberos.auth.enabled
+      #       value: "true"
+      #   roleConfigGroups:
+      #     - refName: nifiregistry-NIFI_REGISTRY_SERVER-BASE
+      #       roleType: NIFI_REGISTRY_SERVER
+      #       base: true
       - refName: tez
         serviceType: TEZ
         roleConfigGroups:
@@ -401,38 +398,38 @@ cdpdc:
               - name: fs_data_dirs
                 variable: kudu-KUDU_TSERVER-BASE-fs_data_dirs
             base: true
-      - refName: cdsw
-        serviceType: CDSW
-        serviceConfigs:
-          - name: hive_service
-            ref: hive
-          - name: spark_on_yarn_service
-            ref: spark_on_yarn
-          - name: cdsw.domain.config
-            value: "cdsw.{{ hostvars[groups.cdsw_master[0]].public_ip }}.nip.io"
-          - name: yarn_service
-            ref: yarn
-          - name: solr_service
-            ref: solr
-          - name: hbase_service
-            ref: hbase
-          - name: hdfs_service
-            ref: hdfs
-          - name: cdsw.master.ip.config
-            value: "{{ hostvars[groups.cdsw_master[0]].private_ip }}"
-        roleConfigGroups:
-          - refName: cdsw-CDSW_APPLICATION-BASE
-            roleType: CDSW_APPLICATION
-            base: true
-          - refName: cdsw-CDSW_MASTER-BASE
-            roleType: CDSW_MASTER
-            base: true
-          - refName: cdsw-CDSW_DOCKER-BASE
-            roleType: CDSW_DOCKER
-            configs:
-              - name: cdsw.docker.devices.config
-                value: "{{ cdsw_docker_devices_config }}"
-            base: true
+      # - refName: cdsw
+      #   serviceType: CDSW
+      #   serviceConfigs:
+      #     - name: hive_service
+      #       ref: hive
+      #     - name: spark_on_yarn_service
+      #       ref: spark_on_yarn
+      #     - name: cdsw.domain.config
+      #       value: "cdsw.{{ hostvars[groups.cdsw_master[0]].public_ip }}.nip.io"
+      #     - name: yarn_service
+      #       ref: yarn
+      #     - name: solr_service
+      #       ref: solr
+      #     - name: hbase_service
+      #       ref: hbase
+      #     - name: hdfs_service
+      #       ref: hdfs
+      #     - name: cdsw.master.ip.config
+      #       value: "{{ hostvars[groups.cdsw_master[0]].private_ip }}"
+      #   roleConfigGroups:
+      #     - refName: cdsw-CDSW_APPLICATION-BASE
+      #       roleType: CDSW_APPLICATION
+      #       base: true
+      #     - refName: cdsw-CDSW_MASTER-BASE
+      #       roleType: CDSW_MASTER
+      #       base: true
+      #     - refName: cdsw-CDSW_DOCKER-BASE
+      #       roleType: CDSW_DOCKER
+      #       configs:
+      #         - name: cdsw.docker.devices.config
+      #           value: "{{ cdsw_docker_devices_config }}"
+      #       base: true
       - refName: impala
         serviceType: IMPALA
         serviceConfigs:
@@ -458,26 +455,26 @@ cdpdc:
           - refName: impala-CATALOGSERVER-BASE
             roleType: CATALOGSERVER
             base: true
-      - refName: nifi
-        serviceType: NIFI
-        serviceConfigs:
-          - name: zookeeper_service
-            ref: zookeeper
-          - name: nifitoolkitca_service
-            ref: nifitoolkitca
-          - name: kerberos.auth.enabled
-            value: "true"
-        roleConfigGroups:
-          - refName: nifi-NIFI_NODE-BASE
-            roleType: NIFI_NODE
-            configs:
-              - name: nifi.remote.input.secure
-                value: "false"
-              - name: nifi.remote.input.socket.port
-                value: "50999"
-              - name: nifi.remote.input.host
-                value: "{{ hostvars[groups.cdf[0]].private_ip }}"
-            base: true
+      # - refName: nifi
+      #   serviceType: NIFI
+      #   serviceConfigs:
+      #     - name: zookeeper_service
+      #       ref: zookeeper
+      #     - name: nifitoolkitca_service
+      #       ref: nifitoolkitca
+      #     - name: kerberos.auth.enabled
+      #       value: "true"
+      #   roleConfigGroups:
+      #     - refName: nifi-NIFI_NODE-BASE
+      #       roleType: NIFI_NODE
+      #       configs:
+      #         - name: nifi.remote.input.secure
+      #           value: "false"
+      #         - name: nifi.remote.input.socket.port
+      #           value: "50999"
+      #         - name: nifi.remote.input.host
+      #           value: "{{ hostvars[groups.cdf[0]].private_ip }}"
+      #       base: true
       - refName: phoenix
         serviceType: PHOENIX
         serviceConfigs:
@@ -576,22 +573,22 @@ cdpdc:
           - refName: hdfs-BALANCER-BASE
             roleType: BALANCER
             base: true
-      - refName: schemaregistry
-        serviceType: SCHEMAREGISTRY
-        serviceConfigs:
-          - name: kerberos.auth.enable
-            value: "true"
-          - name: zookeeper_service
-            ref: zookeeper
-        roleConfigGroups:
-          - refName: schemaregistry-SCHEMA_REGISTRY_SERVER-BASE
-            roleType: SCHEMA_REGISTRY_SERVER
-            configs:
-              - name: schema.registry.storage.connector.password
-                variable: schemaregistry-SCHEMA_REGISTRY_SERVER-BASE-schema.registry.storage.connector.password
-              - name: schema.registry.storage.connector.connectURI
-                value: "jdbc:mysql://{{ hostvars[groups.db_server[0]].private_hostname }}:3306/registry"
-            base: true
+      # - refName: schemaregistry
+      #   serviceType: SCHEMAREGISTRY
+      #   serviceConfigs:
+      #     - name: kerberos.auth.enable
+      #       value: "true"
+      #     - name: zookeeper_service
+      #       ref: zookeeper
+      #   roleConfigGroups:
+      #     - refName: schemaregistry-SCHEMA_REGISTRY_SERVER-BASE
+      #       roleType: SCHEMA_REGISTRY_SERVER
+      #       configs:
+      #         - name: schema.registry.storage.connector.password
+      #           variable: schemaregistry-SCHEMA_REGISTRY_SERVER-BASE-schema.registry.storage.connector.password
+      #         - name: schema.registry.storage.connector.connectURI
+      #           value: "jdbc:mysql://{{ hostvars[groups.db_server[0]].private_hostname }}:3306/registry"
+      #       base: true
       - refName: yarn
         serviceType: YARN
         serviceConfigs:
@@ -607,37 +604,37 @@ cdpdc:
           - refName: yarn-JOBHISTORY-BASE
             roleType: JOBHISTORY
             base: true
-      - refName: streams_messaging_manager
-        serviceType: STREAMS_MESSAGING_MANAGER
-        serviceConfigs:
-          - name: zookeeper_service
-            ref: zookeeper
-          - name: cm.metrics.password
-            variable: streams_messaging_manager-cm.metrics.password
-          - name: kafka_service
-            ref: kafka
-          - name: cm.metrics.service.name
-            value: kafka
-          - name: kerberos.auth.enable
-            value: "true"
-          - name: cm.metrics.host
-            value: "{{ hostvars[groups.main_master[0]].private_hostname }}"
-        roleConfigGroups:
-          - refName: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE
-            roleType: STREAMS_MESSAGING_MANAGER_SERVER
-            configs:
-              - name: streams.messaging.manager.storage.connector.password
-                variable: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE-streams.messaging.manager.storage.connector.password
-              - name: streams.messaging.manager.storage.connector.connectURI
-                value: "jdbc:mysql://{{ hostvars[groups.db_server[0]].private_hostname }}:3306/streamsmsgmgr"
-              - name: streams.messaging.manager.kafka.client.security.protocol
-                value: PLAINTEXT
-              - name: streams.messaging.manager.schema.registry.url
-                value: "http://{{ hostvars[groups.cdf[0]].private_hostname }}:7788/api/v1"
-            base: true
-          - refName: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_UI-BASE
-            roleType: STREAMS_MESSAGING_MANAGER_UI
-            base: true
+      # - refName: streams_messaging_manager
+      #   serviceType: STREAMS_MESSAGING_MANAGER
+      #   serviceConfigs:
+      #     - name: zookeeper_service
+      #       ref: zookeeper
+      #     - name: cm.metrics.password
+      #       variable: streams_messaging_manager-cm.metrics.password
+      #     - name: kafka_service
+      #       ref: kafka
+      #     - name: cm.metrics.service.name
+      #       value: kafka
+      #     - name: kerberos.auth.enable
+      #       value: "true"
+      #     - name: cm.metrics.host
+      #       value: "{{ hostvars[groups.main_master[0]].private_hostname }}"
+      #   roleConfigGroups:
+      #     - refName: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE
+      #       roleType: STREAMS_MESSAGING_MANAGER_SERVER
+      #       configs:
+      #         - name: streams.messaging.manager.storage.connector.password
+      #           variable: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_SERVER-BASE-streams.messaging.manager.storage.connector.password
+      #         - name: streams.messaging.manager.storage.connector.connectURI
+      #           value: "jdbc:mysql://{{ hostvars[groups.db_server[0]].private_hostname }}:3306/streamsmsgmgr"
+      #         - name: streams.messaging.manager.kafka.client.security.protocol
+      #           value: PLAINTEXT
+      #         - name: streams.messaging.manager.schema.registry.url
+      #           value: "http://{{ hostvars[groups.cdf[0]].private_hostname }}:7788/api/v1"
+      #       base: true
+      #     - refName: streams_messaging_manager-STREAMS_MESSAGING_MANAGER_UI-BASE
+      #       roleType: STREAMS_MESSAGING_MANAGER_UI
+      #       base: true
       - refName: hbase
         serviceType: HBASE
         serviceConfigs:
@@ -675,15 +672,15 @@ cdpdc:
               - name: hbase_master_java_heapsize
                 value: "524288000"
             base: true
-      - refName: nifitoolkitca
-        serviceType: NIFITOOLKITCA
-        serviceConfigs:
-          - name: nifi.toolkit.tls.ca.server.token
-            variable: nifitoolkitca-nifi.toolkit.tls.ca.server.token
-        roleConfigGroups:
-          - refName: nifitoolkitca-NIFI_TOOLKIT_SERVER-BASE
-            roleType: NIFI_TOOLKIT_SERVER
-            base: true
+      # - refName: nifitoolkitca
+      #   serviceType: NIFITOOLKITCA
+      #   serviceConfigs:
+      #     - name: nifi.toolkit.tls.ca.server.token
+      #       variable: nifitoolkitca-nifi.toolkit.tls.ca.server.token
+      #   roleConfigGroups:
+      #     - refName: nifitoolkitca-NIFI_TOOLKIT_SERVER-BASE
+      #       roleType: NIFI_TOOLKIT_SERVER
+      #       base: true
       - refName: kms
         serviceType: KMS
         roleConfigGroups:
