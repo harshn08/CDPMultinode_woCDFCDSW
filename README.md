@@ -34,17 +34,7 @@ Download scripts,CDP DC bits and licence info:
 		2> Copy the license file to this directory.You should have requested a trial license from the partner portal. 
 		3> Copy the AWS  ".pem" file into the home directory (Users/ssharma)
 		4> Create a directory say, mn-script. unzip the files here.  
-		5> Create another directory under mn-script eg #mkdir bins
-		6> Download the following or latest CSD’s into the “bins” directory 
-		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFI-1.9.0.1.0.0.0-90.jar 
-		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFICA-1.9.0.1.0.0.0-90.jar
-		    https://archive.cloudera.com/CFM/csd/1.0.0.0/NIFIREGISTRY-0.3.0.1.0.0.0-90.jar
-		Download the following or latest files into the “bins” directory
-		CSP: https://www.cloudera.com/downloads/cdf/csp-trial.html(Version 0.8 - sha, parcel files and CSD)
-		CSM: https://www.cloudera.com/downloads/cdf/csm-trial.html(Version 2.0 - sha, parcel files and CSD)
-
-	NOTE: Make sure the SCHEMAREGISTRY, STREAMS_MESSAGING_MANAGER and STREAMS_REPLICATION_MANAGER files are 
-	in the “bins” directory before executing the ansible playbook. 
+		
 
 Docker Setup:
 
@@ -168,20 +158,7 @@ The home directory should be accessible via docker mapping of the folders.
 	 Example:
  	 # from vault file , replace <replace me> it with your own key  
   		private_key: "{{ replace_key }}"
-		
-         b> Provide the location for the parcel downloaded above from /bins folder (Step 6 Download and licence info)
-	 where it says <replace me>
-          Example: 
-	     local_csds: 
-   	           - /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.jar <replace me>
-  	           - /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.jar<replace me>
-	    local_parcels: 
- 	    	- /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel<replace me>>
-      	     	- /home/ssharma/bins/SCHEMAREGISTRY-0.8.0.2.0.0.0-135-el7.parcel.sha<replace me>
-      	     	- /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel<replace me>
-             	- /home/ssharma/bins/STREAMS_MESSAGING_MANAGER-2.1.0.2.0.0.0-135-el7.parcel.sha<replace me>
-
-       
+		     
 	7> For Auto_TLS, you will need a CDP DC license file from cloudera.
 	Specify the path to that file as indicated below, whereever it says <replace me> 
  	
