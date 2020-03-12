@@ -177,10 +177,10 @@ Example:
 
 After End of Successful Execution, You will see something like below as a Recap:
 
-TASK [cdpdc_cm_server : reset var _api_command] ******************************************************************************************************************************
+TASK [cdpdc_cm_server : reset var _api_command] ****************************************************************************************************************
 ok: [18.208.221.22]
 
-PLAY RECAP ******************************************************************************************************************************
+PLAY RECAP *****************************************************************************************************
 18.208.221.22              : ok=114  changed=52   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1   
 34.227.197.12              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
 35.172.213.181             : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
@@ -188,13 +188,12 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=17   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 
-Use cm node ( 4xlarge ) to get into CM to verify the cluster status
-above example shows [54.91.49.29] as cm server
+Use cm node ( 4xlarge ) to get into CM to verify the cluster status above, Ex: 54.91.49.29 as cm server
 
 https://18.208.221.22:7183/cmf/login
 Pwd: admin/admin
 
-Login into AWS, check AWS EC2 instance , you will be able to see following instances created   has 3 Worker nodes(2xlarge+100gb) , 1 CDF(2xlarge+100gb) and 1(4xlarge+100gb) master nodes
+Login into AWS, check AWS EC2 instance , you will be able to see following instances created has 3 Worker nodes(2xlarge+100gb) and 1 (4xlarge+100gb) master nodes
 
 
 
