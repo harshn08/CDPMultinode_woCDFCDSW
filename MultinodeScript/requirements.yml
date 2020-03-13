@@ -1,0 +1,5 @@
+---
+# - src: https://github.cloudera.com/test/role-cdp-deployment
+#   scm: git
+#   version: master
+#   name: cdp_deployment

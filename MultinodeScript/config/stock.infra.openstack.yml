@@ -24,9 +24,9 @@ instances:
   domain: field.hortonworks.com
   bootstrap: ""
   tags:
-    owner: test.user
+    owner: fabio.ghirardello
     enddate: "01312020"
-    project: multi-ansible-test
+    project: fabio-ansible-test
  
   
   instance_groups:
