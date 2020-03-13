@@ -1,5 +1,0 @@
-test/*
-ansible.log
-bins/*
-play.yml
-.*
