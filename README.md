@@ -63,7 +63,7 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 		
 
  6.  At this time,you have a docker image with all the relevant files mapped to your home directory eg: /home/hshah. Next,we will prep the docker container and customize these files. 
- 7. Install pyhton3 and boto3 in your Docker image 
+ 7. Install python3 and boto3 in your Docker image 
 	
 		[root@2e3f9e83cf7a  ~]# dnf update -y
 		[root@2e3f9e83cf7a  ~]# dnf install -y ansible python3-pip git  
