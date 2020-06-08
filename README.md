@@ -74,7 +74,7 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 	
 	Step 1 : This step produces agent pid as below
 	
-		$[root@2e3f9e83cf7a  ~]#eval ‘ssh-agent -s’
+		$[root@2e3f9e83cf7a  ~]# eval ‘ssh-agent -s’
 		  
 		SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
  		SSH_AGENT_PID=51911; export SSH_AGENT_PID;
@@ -82,13 +82,13 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 		
 	Step2: Use ssh-add command and provide pem file location 
  		
-		$[root@2e3f9e83cf7a  ~] # ssh-add /home/hshah/my_key.pem
+		$[root@2e3f9e83cf7a  ~]# ssh-add /home/hshah/my_key.pem
   		Identity added: /home/hshah/my_key.pem
 
  9.  Adding key-vault : Create the ansible vault file in the root directory to store the private key. 
 Note:It will ask for password to create vault, remember the password as we will store this in a password file as the next step
         
-	[root@2e3f9e83cf7a  ~]#ansible-vault create keys.vault
+	[root@2e3f9e83cf7a  ~]# ansible-vault create keys.vault
 
  10. This will open up an editor similar to vi. Copy and paste your .pem contents, pay close attention at the indentation. Give the key name and space for " **|** ", **add 2 spaces for each line below key name** 
       
@@ -107,7 +107,7 @@ You will be asked to enter a password. Save the password. You can use this passw
 
 First verify if the vault file was created:
 
-	[root@2e3f9e83cf7a  ~]#ls -ltr /home/hshah/keys.vault
+	[root@2e3f9e83cf7a  ~]# ls -ltr /home/hshah/keys.vault
 
 You can use the following command to edit the ansible key vault file:
 
@@ -116,8 +116,8 @@ You can use the following command to edit the ansible key vault file:
 
  11. On docker, let's now create a simple file to store the Vault password, so you won't be prompted at runtime, create the file under your home directory
 		
-	[root@2e3f9e83cf7a  ~]#echo "YourPassword" > vault-password-file	
-	[root@2e3f9e83cf7a  ~]#chmod 400 vault-password-file
+	[root@2e3f9e83cf7a  ~]# echo "YourPassword" > vault-password-file	
+	[root@2e3f9e83cf7a  ~]# chmod 400 vault-password-file
 		
 NOTE: Record the file path and file name. We will use it in the config files
 
