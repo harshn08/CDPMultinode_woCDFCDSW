@@ -56,7 +56,7 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 		$docker commit 77d2b4577cfb  myfedora 
 	
 
- 5. Mounting your local Mac drive  /Users/\<dir-name-here> to Docker /home/\<dir-name-here>
+ 5. **IMPORTANT:** Mounting your local Mac drive  /Users/\<dir-name-here> to Docker /home/\<dir-name-here>
 		
 		Mac Example: $docker run -it --volume /Users/hshah:/home/hshah myfedora /bin/bash
 		Windows Example: $docker run -it --volume C:\Users\hshah:/home/hshah myfedora /bin/bash
@@ -69,7 +69,7 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 		[root@2e3f9e83cf7a  ~]# dnf install -y ansible python3-pip git  
 		[root@2e3f9e83cf7a  ~]# pip3 install boto boto3
 
- 8. Add SSH key on docker ( It is 2 step process )
+ 8. **IMPORTANT:** Add SSH key on docker ( It is 2 step process )
 	NOTE: On windows, you will need to copy the .pem file to a native docker folder and run these commands. 
 	
 	Step 1 : This step produces agent pid as below
@@ -116,101 +116,131 @@ You can use the following command to edit the ansible key vault file:
 
  11. On docker, let's now create a simple file to store the Vault password, so you won't be prompted at runtime, create the file under your home directory
 		
-			[root@2e3f9e83cf7a  ~]#echo "YourPassword" > vault-password-file
-			[root@2e3f9e83cf7a  ~]#chmod 400 vault-password-file
+	[root@2e3f9e83cf7a  ~]#echo "YourPassword" > vault-password-file	
+	[root@2e3f9e83cf7a  ~]#chmod 400 vault-password-file
 		
 NOTE: Record the file path and file name. We will use it in the config files
 
 
  12. On docker, export the variables for the AWS keys as below:
             
-		    export AWS_ACCESS_KEY_ID=AKIAQxxxxxx
-	  	    export AWS_SECRET_ACCESS_KEY=uOI3N5KQZ8zbxxxxxxxxxx
+		 export AWS_ACCESS_KEY_ID=AKIAQxxxxxx
+	  	 export AWS_SECRET_ACCESS_KEY=uOI3N5KQZ8zbxxxxxxxxxx
+	  	 
 
 
 ### Modify the configuration file:
 
 At this point, you should have the script under a folder called mn-script.This folder should have the bin directory. 
+
 We will also need access to the vault, pem and password files that are stored in the home directory.
+
 The home directory should be accessible via docker mapping of the folders. 
 
-	1>Open ../config/stock.infra.aws.yml file
-	2>Make changes to parameters in stock.infra.aws.krb.yml where it says <replace me>. 
-	eg Owner,project,enddate,vpc,region,subnet and security group.
-	
-	 region: us-east-1 <replace me>
-	 subnet: subnet-76505a3cxx<replace me>
-  	 security_group: sg-010c70ad828ad9axx<replace me>
-         image: ami-02eac2c0129f6376b <replace me> # CentOS-7 x86_6
-       
-       tags:
-        owner: user.test<replace me>
-        enddate: "01312020"<replace me>
-        project: ansible-test<replace me>
+
+ 1. Open ../config/stock.infra.aws.yml file
+ 2. Make changes to parameters in stock.infra.aws.krb.yml where it says \<replace me>. eg Owner,project,enddate,vpc,region,subnet and security group.
+
+		#defaults for all instance groups
+		region: <replace me> #provide AWS availability zone
+		subnet: <replace me> #provide subnet ID
+		security_group: <replace me> #provide security group ID
+		image: ami-02eac2c0129f6376b  # CentOS-7 x86_64 #optional: replace with another AMI ID
+		user: centos
+		public_key_id: "{{ public_key }}"
+		bootstrap: ""
+		tags:
+			owner: <replace me>
+			enddate: <replace me>
+			project: <replace me>
   
-	3>Open and modify filepath for license in stock.cluster.krb.yml. where it says <replace me>
-	Example:
-	   licence:
-   	   type: enterprise
-      	   filepath: test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt<replace me>
+	  Example of what it should look like below:
 
-	4>Open /etc/ansible/ansible.cfg  make the following changes and save.
+		#defaults for all instance groups
+		region: us-east-1
+		subnet: subnet-12345abc78
+		security_group: sg-12345abc78
+		image: ami-02eac2c0129f6376b  # CentOS-7 x86_64
+		user: centos
+		public_key_id: "{{ public_key }}"
+		bootstrap: ""
+		tags:
+			owner: hshah
+			enddate: "06102020"
+			project: ansible-hshah-test
+
+ 3. Open and modify filepath for license in stock.cluster.krb.yml. where it says **\<replace me>**
+
+
+	See below:
+
+		**Example:**
+		  
+		license:
+		type: enterprise
+		filepath: <replace me> eg path: /test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt
+
+ 4. Change the following information in config/stock.cluster.krb.yml
+
+	 Add the private_key value eg: {{ my_key }}
 	
-		a> uncomment record_host_key
-			# host key checking setting above.
-			record_host_keys=False
+	Example: from the vault file , replace "replace_key" it with your own key  
+	  		private_key: "{{ replace_key }}"
+  		
+
+ 5. Open /etc/ansible/ansible.cfg  make the following changes and save.
+
+	a) uncomment record_host_key
+	
+		# host key checking setting above.
+		record_host_keys=False
 			
-		b> uncomment value_password_file and specify the location of your vault password file.
+	b) uncomment value_password_file and specify the location of your vault password file.
+	
 		 # specifying --vault-password-File on the command line.
-		   vault_password_file = /home/ssharma/sunita-vault-password
+		   vault_password_file = /home/hshah/vault-password-file
 	
-	5>Open /etc/ansible/hosts, add following 2 lines as below and save:
 
-	[local]
-	localhost
+ 6. Open /etc/ansible/hosts, add following 2 lines as below and save:
+
+		[local]
+		localhost
 	
-	6>Change the following information in config/stock.cluster.krb.yml
-	 a> Add the private_key value eg: {{ sunita_key }}
-	 Example:
- 	 # from vault file , replace <replace me> it with your own key  
-  		private_key: "{{ replace_key }}"
-		     
-	7> For Auto_TLS, you will need a CDP DC license file from cloudera.
-	Specify the path to that file as indicated below, whereever it says <replace me> 
+ 7. For Auto_TLS, you will need a CDP DC license file from cloudera.
+
+	Specify the path to that file as indicated below, wherever it says <replace me> 
  	
-	 licence:
-      	   type: enterprise
-           filepath: test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt<replace me>
+		 licence:
+	      	   type: enterprise
+	           filepath: <replace me> #/test_2019_2020_Licenseinfo/test_2019_2020_cloudera_license.txt
  
 
 Now are ready to execute the ansible playbook from mn-script folder.
 
-  $ansible-playbook site.yml -e "infra=config/stock.infra.aws.yml" -e "cluster=config/stock.cluster.krb.yml"  -e "vault= <path-to-keys.vault-file>" -e "cdpdc_teardown=<userid-date>" -e "public_key=<name_of_public_key_AWS>"
+	$ansible-playbook site.yml -e "infra=config/stock.infra.aws.yml" -e "cluster=config/stock.cluster.krb.yml"  -e "vault= <path-to-keys.vault-file>" -e "cdpdc_teardown=<userid-date>" -e "public_key=<name_of_public_key_AWS>" -e "repo_username=<username for archive.cloudera.com>" -e "repo_password=<password for archive.cloudera.com>" 
 
 Example:
 
- ansible-playbook site.yml -e "infra=config/stock.infra.aws.yml" -e "cluster=config/stock.cluster.krb.yml"  -e "vault=/root/ashish_keys.vault" -e "cdpdc_teardown=sunita-03122020" -e "public_key=sunita-pse-sandbox"
+ 
+
+	ansible-playbook site.yml -e "infra=config/stock.infra.aws.yml" -e "cluster=config/stock.cluster.krb.yml" -e "vault=/home/hshah/keys.vault" -e "cdpdc_teardown=hshah-06102020" -e "public_key=my_key" -e "repo_username=abcd-1234-wxyz-6789" -e "repo_password=abcd1234"
 
 After End of Successful Execution, You will see something like below as a Recap:
 
-	TASK [cdpdc_cm_server : reset var _api_command] 			***********************************************************************************[18.208.221.22]
+	TASK [cdpdc_cm_server : reset var _api_command] ***********************************************************************************************************************************************
+	ok: [3.235.57.178]
 
-	PLAY RECAP ***********************************************************************************
-	18.208.221.22              : ok=114  changed=52   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1   
-	34.227.197.12              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-	35.172.213.181             : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-	54.90.184.32               : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
-	localhost                  : ok=17   changed=4    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+	PLAY RECAP ************************************************************************************************************************************************************************************
+	3.235.151.211              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1
+	3.235.57.178               : ok=114  changed=43   unreachable=0    failed=0    skipped=6    rescued=0    ignored=1
+	34.239.93.193              : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1
+	54.236.38.17               : ok=31   changed=17   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1
+	localhost                  : ok=17   changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 
-	Use cm node ( 4xlarge ) to get into CM to verify the cluster status above, Ex: 54.91.49.29 as cm server
+Use cm node ( 4xlarge ) to get into CM to verify the cluster status above, Ex: 3.235.57.178 as cm server
 
-	https://18.208.221.22:7183/cmf/login
+	https://3.235.57.178:7183/cmf/login
 	Pwd: admin/admin
 
-	Login into AWS, check AWS EC2 instance , you will be able to see following instances created has 3 Worker nodes(2xlarge+100gb) and 1 (4xlarge+100gb) master nodes
-
-
-
-
-	
+Login into AWS, check AWS EC2 instance , you will be able to see following instances created has 3 Worker nodes(2xlarge+100gb) and 1 (4xlarge+100gb) master nodes
