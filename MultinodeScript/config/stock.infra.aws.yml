@@ -10,17 +10,17 @@ instances:
   cloud: aws              # aws, azure, gcp, openstack (field cloud on OpenStack)
 
   # defaults for all instance groups
-  region: us-east-1
-  subnet: subnet-76505a3c
-  security_group: sg-010c70ad828ad9a20
+  region: <replace me> #provide AWS availability zone for eg: us-east-1
+  subnet: <replace me> #provide subnet ID
+  security_group: <replace me> #provide security group ID
   image: ami-02eac2c0129f6376b # CentOS-7 x86_64
   user: centos
   public_key_id: "{{ public_key }}"  
   bootstrap: ""
   tags:
-    owner: sunita.sharma
-    enddate: "01312020"
-    project: ansible-sstest
+    owner: <replace me>
+    enddate: <replace me>
+    project: <replace me>
   
   instance_groups:
     - inventory_group: 
