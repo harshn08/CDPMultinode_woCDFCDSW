@@ -82,7 +82,7 @@ Docker Setup:
         
 	 [root@2e3f9e83cf7a  ~]#ansible-vault create ssharma_keys.vault
        
-      11> This will open up an editor similar to vi. Copy and paste your .pem contents,Pay close attention at the 		indentation.Give the key name and space for | , add 2 spaces for each line below key name 
+      11> This will open up an editor similar to vi. Copy and paste your .pem contents,Pay close attention at the 		indentation. Give the key name and space for | ,add 2 spaces for each line below key name 
       
 	For Example: ssharma_keys.vault, give a <name>_key ex: sunita_key: | as shown below
 	
