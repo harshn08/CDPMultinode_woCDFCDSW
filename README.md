@@ -4,115 +4,131 @@ CDP Multinode script using Docker on Mac/Windows 10,
 This will create brand new 4 instances on AWS( 1 -4xlarge for master and 3- 2xlarge worker nodes)
 CDP DC will be installed with full security (Kerberos,TLS and KMS)
 
-Updated on March 11, 2020
+Updated on June 8, 2020
 
 
-Assumptions:
+## **Assumptions**:
 
-		1> This document assumes that you have access to an AWS account
-		2> Partners or their IT Dept can create their own VPC, Subnet, key-pair and security group 
-		in the same availability zone that will be used to create multi node instances in the script below.
-		3> Request cloudera license from partner portal  
-		4> Access to valid cloudera.com credentials to download binaries
-		5> Access to the relevant script from partner portal here.
-		6> Access to the following versions of docker are used for Mac OS and Windows 10 Pro. 
+
+ 1. This document assumes that you have access to an AWS account
+ 2. Partners or their IT Dept can create their own VPC, Subnet, key-pair and security group in the same availability zone that will be used to create multi node instances in the script below.
+ 3. Request cloudera license from partner portal  
+ 4. Access to valid cloudera.com credentials to download binaries
+ 5. Access to the relevant script from partner portal here.
+ 6. Access to the following versions of docker are used for Mac OS and Windows 10 Pro. 
 		https://hub.docker.com/editions/community/docker-ce-desktop-mac/
 		https://hub.docker.com/editions/community/docker-ce-desktop-windows/
 
-AWS Dependencies:
+## AWS Dependencies:
 
-		1> AWS keypair (e.g. “.pem”) files to use with the scripts
-		2> Decide on AWS region/AZ (us-east-1 used in this example)
-		3> Ensure an equivalent CentOS image is available in your AZ,Example: ami-02eac2c0129f6376b #CentOS-7x86_64 
-		4> Create a VPC(or use default), subnet and Security Group (SG) where these nodes are in the same AZ. 
-		5> Record the SG to be used in the config files. Make sure the SG is open to all hosts in security group.
-		
-Download scripts,CDP DC bits and licence info:
-
-		1> Download the scripts. Save the files to your home directory (e.g. Users/ssharma)
-		   NOTE: For Windows, avoid using space in folder-names. 
-		2> Copy the license file to this directory.You should have requested a trial license from the partner portal. 
-		3> Copy the AWS  ".pem" file into the home directory (Users/ssharma)
-		4> Create a directory say, mn-script. unzip the files here.  
+ 1.  AWS keypair (e.g. “.pem”) files to use with the scripts
+ 2. Decide on AWS region/AZ (us-east-1 used in this example)
+ 3. Ensure an equivalent CentOS image is available in your AZ,Example: ami-02eac2c0129f6376b #CentOS-7x86_64 
+ 4. Create a VPC(or use default), subnet and Security Group (SG) where these nodes are in the same AZ. 
+ 5. Record the SG to be used in the config files. Make sure the SG is open to all hosts in security group.
 		
 
-Docker Setup:
+## Download scripts, CDP DC bits and license info:
 
-	On both Windows and Mac OS, Following commands are used to setup the environment.
-	We will execute the scripts to setup the 6-node cluster with all the relevant services. 
-	Kerberos,KMS and TLS will be setup by default. 
+ 
+ 1. Download this Github repo and save the files to your home directory (e.g. Users/hshah) *NOTE: For Windows, avoid using space in folder-names.* 
+ 2. Copy the license file to this directory. You should have requested a trial license from the partner portal. 
+ 3. Copy the AWS  ".pem" file into the home directory (Users/hshah)
+ 4. Create a directory for the Github repo, eg: mn-script. unzip the files here.
+		
+
+### Docker Setup:
+
+On both Windows and Mac OS, Following commands are used to setup the environment.
 	
-	1> Ensure docker desktop has been installed and is running without any issues on your laptop. 
-	2> Open a terminal on mac and command prompt on a windows machine. 
-	   The set of instructions work on both Mac OS and Windows. 
-	3> $docker run -it fedora /bin/bash, you will see docker id as example below. 
-	      ...@077d2b4577cfb/mn-script#] exit;
-	    Make a note the ID  "77d2b4577cfb" . Use this id to run the next command. 
-	4> execute $docker commit 77d2b4577cfb  myfedora (Use the ID from command above)
-	5>Mounting your local Mac drive  /Users/<dir> to Docker /home/<dir>
+We will execute the scripts to setup the 6-node cluster with all the relevant services. Kerberos,KMS and TLS will be setup by default. 
+	
+
+ 1. Ensure docker desktop has been installed and is running without any issues on your laptop.
+ 2. Open a terminal on mac and command prompt on a windows machine. The set of instructions work on both Mac OS and Windows.
+ 3. $docker run -it fedora /bin/bash, you will see docker id as example below. 
+					
+		...@077d2b4577cfb/mn-script#] exit;
+	
+    Make a note the ID  "77d2b4577cfb" . Use this id to run the next command. 
+ 4. Execute the following command (Use the ID from command above)
+
+		$docker commit 77d2b4577cfb  myfedora 
+	
+
+ 5. Mounting your local Mac drive  /Users/\<dir-name-here> to Docker /home/\<dir-name-here>
 		
-		Mac Example: $docker run -it --volume /Users/ssharma:/home/ssharma myfedora /bin/bash
-		Windows Example: $docker run -it --volume C:\Users\ssharma:/home/ssharma myfedora /bin/bash
+		Mac Example: $docker run -it --volume /Users/hshah:/home/hshah myfedora /bin/bash
+		Windows Example: $docker run -it --volume C:\Users\hshah:/home/hshah myfedora /bin/bash
 		
-	6> At this time,you have a docker image with all the relevant files mapped to your home directory 
-	eg: /home/ssharma.Next,we will prep the docker container and customize these files. 
-        7> Install pyhton3 and boto3 in your Docker image 
+
+ 6.  At this time,you have a docker image with all the relevant files mapped to your home directory eg: /home/hshah. Next,we will prep the docker container and customize these files. 
+ 7. Install pyhton3 and boto3 in your Docker image 
 	
 		[root@2e3f9e83cf7a  ~]# dnf update -y
 		[root@2e3f9e83cf7a  ~]# dnf install -y ansible python3-pip git  
 		[root@2e3f9e83cf7a  ~]# pip3 install boto boto3
-	
-	8> Add SSH key on docker ( It is 2 step process )
+
+ 8. Add SSH key on docker ( It is 2 step process )
 	NOTE: On windows, you will need to copy the .pem file to a native docker folder and run these commands. 
 	
 	Step 1 : This step produces agent pid as below
 	
-	$[root@2e3f9e83cf7a  ~]#eval ‘ssh-agent -s’
-	  SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
+		$[root@2e3f9e83cf7a  ~]#eval ‘ssh-agent -s’
+		  
+		SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
  		SSH_AGENT_PID=51911; export SSH_AGENT_PID;
        		echo Agent pid 51911;
 		
 	Step2: Use ssh-add command and provide pem file location 
  		
-		$[root@2e3f9e83cf7a  ~] # ssh-add /home/ssharma/sunita_field.pem
-  		Identity added: /home/ssharma/sunita_field.pem
+		$[root@2e3f9e83cf7a  ~] # ssh-add /home/hshah/my_key.pem
+  		Identity added: /home/hshah/my_key.pem
 
-      10> Adding key-vault : Create the ansible vault file in the root directory to store the private key. 
-      Note:It will ask for password to create vault,We will store this in a password file as the next step
+ 9.  Adding key-vault : Create the ansible vault file in the root directory to store the private key. 
+Note:It will ask for password to create vault, remember the password as we will store this in a password file as the next step
         
-	 [root@2e3f9e83cf7a  ~]#ansible-vault create ssharma_keys.vault
-       
-      11> This will open up an editor similar to vi. Copy and paste your .pem contents,Pay close attention at the 		indentation. Give the key name and space for | ,add 2 spaces for each line below key name 
+	[root@2e3f9e83cf7a  ~]#ansible-vault create keys.vault
+
+ 10. This will open up an editor similar to vi. Copy and paste your .pem contents, pay close attention at the indentation. Give the key name and space for " **|** ", **add 2 spaces for each line below key name** 
       
-	For Example: ssharma_keys.vault, give a <name>_key ex: sunita_key: | as shown below
+      For Example: ssharma_keys.vault, give a \<name>_key ex: my_key: | as shown below
 	
-	sunita_key: |
+	my_key: |
   	  -----BEGIN RSA PRIVATE KEY-----
   	  Madsfdasagafgfdgfdsgadhdjasvfgaertqrecsf
   	 [...]
   	 dfasdgretwreaqghaduogihafdkghareoighfdk=
   	 -----END RSA PRIVATE KEY-----
    
-  	NOTE: Record the private key name (ex here is sunita_key) which will be used later in the config files
+NOTE: Record the private key name (eg: my_key) which will be used later in the config files
 	
-   	You will be asked to enter a password. Save the password. You can use this password in case you want to 
-	view or edit the file at a later stage. Use ansible-vault view or ansible-vault edit to make changes
+You will be asked to enter a password. Save the password. You can use this password in case you want to view or edit the file at a later stage. Use ansible-vault view or ansible-vault edit to make changes
+
+First verify if the vault file was created:
+
+	[root@2e3f9e83cf7a  ~]#ls -ltr /home/hshah/keys.vault
+
+You can use the following command to edit the ansible key vault file:
+
+	[root@373dab68775b  ~]# ansible-vault edit keys.vault
 	   
-		[root@2e3f9e83cf7a  ~]#ls -ltr /home/ssharma/ssharma_keys.vault (verify)
-		
-	12> On docker, let's now create a simple file to store the Vault password, so you won't be prompted at runtime,
-	Create the file under your home directory
-		[root@2e3f9e83cf7a  ~]#echo "YourPassword" > vault-password-file
-		[root@2e3f9e83cf7a  ~]#chmod 400 vault-password-file
-		
-	NOTE: Record the file path and file name. We will use it in the config files
 
-	13> On docker export variables for the AWS keys as below:
+ 11. On docker, let's now create a simple file to store the Vault password, so you won't be prompted at runtime, create the file under your home directory
+		
+			[root@2e3f9e83cf7a  ~]#echo "YourPassword" > vault-password-file
+			[root@2e3f9e83cf7a  ~]#chmod 400 vault-password-file
+		
+NOTE: Record the file path and file name. We will use it in the config files
+
+
+ 12. On docker, export the variables for the AWS keys as below:
             
-	    export AWS_ACCESS_KEY_ID=AKIAQxxxxxx
-  	    export AWS_SECRET_ACCESS_KEY=uOI3N5KQZ8zbxxxxxxxxxx
+		    export AWS_ACCESS_KEY_ID=AKIAQxxxxxx
+	  	    export AWS_SECRET_ACCESS_KEY=uOI3N5KQZ8zbxxxxxxxxxx
 
-Modify the configuration file:
+
+### Modify the configuration file:
 
 At this point, you should have the script under a folder called mn-script.This folder should have the bin directory. 
 We will also need access to the vault, pem and password files that are stored in the home directory.
