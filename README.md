@@ -74,7 +74,7 @@ We will execute the scripts to setup the 6-node cluster with all the relevant se
 	
 	Step 1 : This step produces agent pid as below
 	
-		$[root@2e3f9e83cf7a  ~]# eval ‘ssh-agent -s’
+		$[root@2e3f9e83cf7a  ~]# eval 'ssh-agent -s'
 		  
 		SSH_AUTH_SOCK=/var/folders/3m/xs2m6r7x7_qg8wp11ggy8l000000gp/T//ssh-ASHkKOqJ6PpS/agent.51910; export SSH_AUTH_SOCK;
  		SSH_AGENT_PID=51911; export SSH_AGENT_PID;
