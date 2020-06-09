@@ -92,7 +92,7 @@ Note:It will ask for password to create vault, remember the password as we will 
 
  10. This will open up an editor similar to vi. Copy and paste your .pem contents, pay close attention at the indentation. Give the key name and space for " **|** ", **add 2 spaces for each line below key name** 
       
-      For Example: ssharma_keys.vault, give a \<name>_key ex: my_key: | as shown below
+      For Example: keys.vault, give a \<name>_key ex: my_key: | as shown below
 	
 	my_key: |
   	  -----BEGIN RSA PRIVATE KEY-----
