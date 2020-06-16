@@ -135,13 +135,13 @@
           - 204
         method: POST
       when: _license.json.message is defined
-  when: cdpdc.cm.licence.type == "trial"
+  when: cdpdc.cm.license.type == "trial"
 
 - name: Enterprise license
   block:
     - name: upload lic file to host
       copy:
-        src: "{{ cdpdc.cm.licence.filepath }}"
+        src: "{{ cdpdc.cm.license.filepath }}"
         dest: /root/lic.txt
         owner: root
         group: root
@@ -158,7 +158,7 @@
         warn: False
       register: resp
       failed_when: "'owner' not in resp.stdout"
-  when: cdpdc.cm.licence.type == "enterprise"
+  when: cdpdc.cm.license.type == "enterprise"
 
 
 
