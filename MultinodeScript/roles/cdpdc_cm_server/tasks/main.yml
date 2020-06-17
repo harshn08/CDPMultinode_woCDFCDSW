@@ -113,7 +113,7 @@
 
 # LICENSE
 # if fresh install, api returns a 404 
-- name: Trial Licence
+- name: Trial License
   block:
     - name: get License details
       uri:
