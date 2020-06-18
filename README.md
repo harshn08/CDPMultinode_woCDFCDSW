@@ -131,7 +131,7 @@ NOTE: Record the file path and file name. We will use it in the config files
 
 ### Modify the configuration file:
 
-At this point, you should have the script under a folder called mn-script.This folder should have the bin directory. 
+At this point, you should have the scripts/repo under a folder called mn-script. If you don't download/clone this repo and move it under the home directory so that is accessible via the docker container.
 
 We will also need access to the vault, pem and password files that are stored in the home directory.
 
